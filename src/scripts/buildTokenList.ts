@@ -43,7 +43,6 @@ export const buildTokenList = async (network: Network): Promise<void> => {
     })
   );
 
-  await fs.copyFile(dir, `${__dirname}/../../sbr.svg`);
   const list: TokenList = {
     name: `Saber LP Token List (${network})`,
     logoURI:
