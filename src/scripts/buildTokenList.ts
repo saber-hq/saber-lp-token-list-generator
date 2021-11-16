@@ -27,6 +27,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
 
   const dir = `${__dirname}/../../data`;
   await fs.mkdir(dir, { recursive: true });
+  await fs.mkdir(`${dir}/solana-token-list`, { recursive: true });
 
   const assetsDir = `${dir}/assets/${networkFmt}`;
   const assetsJpgDir = `${dir}/assets-jpg/${networkFmt}`;
@@ -61,6 +62,25 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   await fs.writeFile(
     `${dir}/lists/saber-lp.${network}.json`,
     JSON.stringify(list)
+  );
+
+  const tokensForSolanaTokenList = list.tokens.map((tok) => {
+    const newLogoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
+    if (tok.extensions) {
+      const {
+        underlyingTokens: _underlyingTokens,
+        source: _source,
+        currency: _currency,
+        ...extensions
+      } = tok.extensions;
+      return { ...tok, logoURI: newLogoURI, extensions };
+    }
+    return { ...tok, logoURI: newLogoURI };
+  });
+
+  await fs.writeFile(
+    `${dir}/solana-token-list/tokens.${network}.json`,
+    JSON.stringify(tokensForSolanaTokenList, null, 2)
   );
 };
 
