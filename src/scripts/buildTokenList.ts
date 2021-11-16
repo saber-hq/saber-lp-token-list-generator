@@ -68,6 +68,9 @@ export const buildTokenList = async (network: Network): Promise<void> => {
     const logoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
     const theToken = {
       ...tok,
+      name: tok.name.endsWith(" Saber LP")
+        ? `Saber ${tok.name.replaceAll(" Saber LP", " LP")}`
+        : tok.name,
       symbol: tok.symbol.replaceAll("_", ""),
       logoURI,
     };
