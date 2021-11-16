@@ -65,7 +65,12 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   );
 
   const tokensForSolanaTokenList = list.tokens.map((tok) => {
-    const newLogoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
+    const logoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
+    const theToken = {
+      ...tok,
+      symbol: tok.symbol.replaceAll("_", ""),
+      logoURI,
+    };
     if (tok.extensions) {
       const {
         underlyingTokens: _underlyingTokens,
@@ -73,9 +78,9 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         currency: _currency,
         ...extensions
       } = tok.extensions;
-      return { ...tok, logoURI: newLogoURI, extensions };
+      return { ...theToken, extensions };
     }
-    return { ...tok, logoURI: newLogoURI };
+    return theToken;
   });
 
   await fs.writeFile(
