@@ -1,6 +1,9 @@
 name: Update token list
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch: {}
@@ -22,6 +25,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+      - run: yarn install
       - run: yarn build-token-list
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
