@@ -2,6 +2,7 @@ import type { TokenInfo } from "@saberhq/token-utils";
 import axios from "axios";
 import type { Image, NodeCanvasRenderingContext2D } from "canvas";
 import { createCanvas, loadImage } from "canvas";
+import sharp from "sharp";
 
 const DIMENSION = 256;
 
@@ -19,11 +20,17 @@ const drawSubImg = async ({
     if (!url) {
       image = await loadImage(`${__dirname}/../public/sbr.svg`);
     } else {
-      const { data: logoAData } = await axios.get<Buffer>(url, {
+      const { data: iconData } = await axios.get<Buffer>(url, {
         responseType: "arraybuffer",
       });
-      image = await loadImage(logoAData);
+      // run through sharp to be save
+      const rasterizedIcon = await sharp(iconData)
+        .resize(DIMENSION, DIMENSION)
+        .png()
+        .toBuffer();
+      image = await loadImage(rasterizedIcon);
     }
+
     ctx.drawImage(
       image,
       position === "a" ? 0 : image.width / 2,
@@ -36,7 +43,7 @@ const drawSubImg = async ({
       DIMENSION
     );
   } catch (e) {
-    console.warn(`Unsupported image: ${url ?? ""}`);
+    console.warn(`Unsupported image: ${url ?? ""}`, e);
   }
 };
 
