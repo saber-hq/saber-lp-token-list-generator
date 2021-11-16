@@ -1,0 +1,48 @@
+{
+  "name": "@saberhq/saber-lp-token-list-generator",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:saber-hq/saber-lp-token-list-generator.git",
+  "author": "Ian Macalinao <ian@saber.so>",
+  "license": "AGPL-3.0",
+  "packageManager": "yarn@3.1.0",
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.0",
+    "@saberhq/eslint-config": "^1.7.1",
+    "@types/bn.js": "^5.1.0",
+    "@types/eslint": "^7.29.0",
+    "@types/lodash": "^4.14.177",
+    "@types/node": "^16.11.7",
+    "@types/prettier": "^2.4.2",
+    "eslint": "^8.2.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-plugin-import": "^2.25.3",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.0.2",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@saberhq/solana-contrib": "^1.7.1",
+    "@saberhq/token-utils": "^1.7.1",
+    "@solana/spl-token-registry": "^0.2.302",
+    "@solana/web3.js": "^1.30.2",
+    "axios": "^0.24.0",
+    "bn.js": "^5.2.0",
+    "canvas": "^2.8.0",
+    "jsbi": "^4.1.0",
+    "lodash": "^4.17.21",
+    "tiny-invariant": "^1.2.0"
+  },
+  "scripts": {
+    "lint": "eslint . --cache",
+    "build-token-list": "rm -fr data / && cp -R public/ data/ && ts-node src/scripts/buildTokenList",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix",
+    "*.{md,json,js,yml,yaml,html}": "prettier --write"
+  }
+}
