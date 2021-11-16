@@ -39,7 +39,10 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         recursive: true,
       });
       await fs.writeFile(`${iconDir}/icon.png`, iconBuffer);
-      return pool.lpToken;
+      return {
+        ...pool.lpToken,
+        logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/icons/${pool.lpToken.address}/icon.png`,
+      };
     })
   );
 

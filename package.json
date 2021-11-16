@@ -38,7 +38,7 @@
   },
   "scripts": {
     "lint": "eslint . --cache",
-    "build-token-list": "rm -fr data / && cp -R public/ data/ && ts-node src/scripts/buildTokenList",
+    "build-token-list": "rm -fr data/ && cp -R public/ data/ && ts-node src/scripts/buildTokenList",
     "prepare": "husky install"
   },
   "lint-staged": {
