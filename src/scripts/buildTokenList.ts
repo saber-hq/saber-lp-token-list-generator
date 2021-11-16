@@ -69,9 +69,9 @@ export const buildTokenList = async (network: Network): Promise<void> => {
     const theToken = {
       ...tok,
       name: tok.name.endsWith(" Saber LP")
-        ? `Saber ${tok.name.replaceAll(" Saber LP", " LP")}`
+        ? `Saber ${tok.name.replace(/ Saber LP/g, " LP")}`
         : tok.name,
-      symbol: tok.symbol.replaceAll("_", ""),
+      symbol: tok.symbol.replace(/_/g, ""),
       logoURI,
     };
     if (tok.extensions) {
