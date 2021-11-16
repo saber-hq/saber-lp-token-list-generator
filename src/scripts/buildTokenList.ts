@@ -20,28 +20,31 @@ export interface PoolInfoRaw {
 }
 
 export const buildTokenList = async (network: Network): Promise<void> => {
+  const networkFmt = network === "mainnet-beta" ? "mainnet" : network;
+  const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
+    `https://registry.saber.so/data/pools-info.${networkFmt}.json`
+  );
+
   const dir = `${__dirname}/../../data`;
   await fs.mkdir(dir, { recursive: true });
-  await fs.mkdir(`${dir}/icons`, { recursive: true });
-  await fs.mkdir(`${dir}/lists/`, { recursive: true });
 
-  const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
-    `https://registry.saber.so/data/pools-info.${
-      network === "mainnet-beta" ? "mainnet" : network
-    }.json`
-  );
+  const assetsDir = `${dir}/assets/${networkFmt}`;
+  const assetsJpgDir = `${dir}/assets-jpg/${networkFmt}`;
+  await fs.mkdir(assetsDir, { recursive: true });
+  await fs.mkdir(assetsJpgDir, { recursive: true });
+  await fs.mkdir(`${dir}/lists/`, { recursive: true });
 
   const lpTokens = await Promise.all(
     data.pools.map(async (pool) => {
-      const iconBuffer = await createLPTokenIcon(pool.underlyingIcons);
-      const iconDir = `${dir}/icons/${pool.lpToken.address}`;
-      await fs.mkdir(iconDir, {
+      const { png, jpg } = await createLPTokenIcon(pool.underlyingIcons);
+      await fs.mkdir(`${assetsDir}/${pool.lpToken.address}`, {
         recursive: true,
       });
-      await fs.writeFile(`${iconDir}/icon.png`, iconBuffer);
+      await fs.writeFile(`${assetsDir}/${pool.lpToken.address}/icon.png`, png);
+      await fs.writeFile(`${assetsJpgDir}/${pool.lpToken.address}.jpg`, jpg);
       return {
         ...pool.lpToken,
-        logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/icons/${pool.lpToken.address}/icon.png`,
+        logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${pool.lpToken.address}/icon.png`,
       };
     })
   );

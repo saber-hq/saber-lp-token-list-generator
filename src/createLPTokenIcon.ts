@@ -3,7 +3,7 @@ import axios from "axios";
 import type { Image, NodeCanvasRenderingContext2D } from "canvas";
 import { createCanvas, loadImage } from "canvas";
 
-const DIMENSION = 512;
+const DIMENSION = 256;
 
 const drawSubImg = async ({
   ctx,
@@ -30,7 +30,7 @@ const drawSubImg = async ({
       0,
       image.width / 2,
       image.height,
-      position === "a" ? 0 : 256,
+      position === "a" ? 0 : DIMENSION / 2,
       0,
       DIMENSION / 2,
       DIMENSION
@@ -42,10 +42,11 @@ const drawSubImg = async ({
 
 export const createLPTokenIcon = async (
   underlying: readonly [TokenInfo, TokenInfo]
-): Promise<Buffer> => {
+): Promise<{ png: Buffer; jpg: Buffer }> => {
   const canvas = createCanvas(DIMENSION, DIMENSION);
   const ctx = canvas.getContext("2d");
   ctx.quality = "best";
+  ctx.patternQuality = "best";
 
   // clip the circle
   ctx.beginPath();
@@ -58,5 +59,8 @@ export const createLPTokenIcon = async (
   const mask = await loadImage(`${__dirname}/mask.svg`);
   ctx.drawImage(mask, 0, 0, DIMENSION, DIMENSION);
 
-  return canvas.toBuffer();
+  return {
+    png: canvas.toBuffer("image/png", { compressionLevel: 9 }),
+    jpg: canvas.toBuffer("image/jpeg"),
+  };
 };
