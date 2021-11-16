@@ -56,7 +56,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   };
 
   await fs.writeFile(
-    `${dir}/token-lists/saber-lp.${network}.json`,
+    `${dir}/lists/saber-lp.${network}.json`,
     JSON.stringify(list)
   );
 };
