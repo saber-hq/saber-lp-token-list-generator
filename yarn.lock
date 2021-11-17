@@ -226,14 +226,14 @@ __metadata:
     "@saberhq/eslint-config": ^1.7.1
     "@saberhq/solana-contrib": ^1.7.1
     "@saberhq/token-utils": ^1.7.1
-    "@solana/spl-token-registry": ^0.2.302
+    "@solana/spl-token-registry": ^0.2.303
     "@solana/web3.js": ^1.30.2
     "@types/bn.js": ^5.1.0
     "@types/eslint": ^7.29.0
     "@types/lodash": ^4.14.177
     "@types/node": ^16.11.7
     "@types/prettier": ^2.4.2
-    "@types/sharp": ^0
+    "@types/sharp": ^0.29.3
     axios: ^0.24.0
     bn.js: ^5.2.0
     canvas: ^2.8.0
@@ -296,12 +296,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@solana/spl-token-registry@npm:^0.2.302":
-  version: 0.2.302
-  resolution: "@solana/spl-token-registry@npm:0.2.302"
+"@solana/spl-token-registry@npm:^0.2.303":
+  version: 0.2.303
+  resolution: "@solana/spl-token-registry@npm:0.2.303"
   dependencies:
     cross-fetch: 3.0.6
-  checksum: 147afd7d72cb7b2d8cc05c8fa05fdc025e2bc4976ad02adfb1738e340ee56467c510709e42c2b01f11b57112abe5ff32f975a9a85dc6bd51d38cc5b9f420d721
+  checksum: a226164d7e4511014fe11a854274955406924b1a55696a709a9161dbfdba8cffcfebb77be701ed4f8914114398e8c1f20c528c76ead2a12e465a301b404f0401
   languageName: node
   linkType: hard
 
@@ -524,7 +524,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sharp@npm:^0":
+"@types/sharp@npm:^0.29.3":
   version: 0.29.3
   resolution: "@types/sharp@npm:0.29.3"
   dependencies:

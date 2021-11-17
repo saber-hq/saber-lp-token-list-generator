@@ -15,7 +15,7 @@
     "@types/lodash": "^4.14.177",
     "@types/node": "^16.11.7",
     "@types/prettier": "^2.4.2",
-    "@types/sharp": "^0",
+    "@types/sharp": "^0.29.3",
     "eslint": "^8.2.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-import": "^2.25.3",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@saberhq/solana-contrib": "^1.7.1",
     "@saberhq/token-utils": "^1.7.1",
-    "@solana/spl-token-registry": "^0.2.302",
+    "@solana/spl-token-registry": "^0.2.303",
     "@solana/web3.js": "^1.30.2",
     "axios": "^0.24.0",
     "bn.js": "^5.2.0",
