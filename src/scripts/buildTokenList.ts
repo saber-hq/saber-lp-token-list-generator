@@ -2,6 +2,7 @@ import type { Network } from "@saberhq/solana-contrib";
 import type { TokenInfo, TokenList } from "@saberhq/token-utils";
 import axios from "axios";
 import * as fs from "fs/promises";
+import { uniqBy } from "lodash";
 
 import { createDecimalWrapperTokenIcon } from "../createDecimalWrapperTokenIcon";
 import { createLPTokenIcon } from "../createLPTokenIcon";
@@ -66,28 +67,30 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   );
 
   const decimalWrappedTokens = await Promise.all(
-    data.pools
-      .flatMap((pool) => pool.tokens)
-      .filter((tok) => tok.tags?.includes("saber-decimal-wrapped"))
-      .map(async (tok) => {
-        const { png, jpg } = await createDecimalWrapperTokenIcon(
-          tok,
-          tok.decimals
-        );
-        await fs.mkdir(`${assetsDir}/${tok.address}`, {
-          recursive: true,
-        });
-        await fs.writeFile(`${assetsDir}/${tok.address}/icon.png`, png);
-        await fs.writeFile(`${assetsJpgDir}/${tok.address}.jpg`, jpg);
-        return {
-          ...tok,
-          logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${tok.address}/icon.png`,
-          extensions: {
-            ...tok.extensions,
-            website: "https://app.saber.so",
-          },
-        };
-      })
+    uniqBy(
+      data.pools
+        .flatMap((pool) => pool.tokens)
+        .filter((tok) => tok.tags?.includes("saber-decimal-wrapped")),
+      (v) => v.address
+    ).map(async (tok) => {
+      const { png, jpg } = await createDecimalWrapperTokenIcon(
+        tok,
+        tok.decimals
+      );
+      await fs.mkdir(`${assetsDir}/${tok.address}`, {
+        recursive: true,
+      });
+      await fs.writeFile(`${assetsDir}/${tok.address}/icon.png`, png);
+      await fs.writeFile(`${assetsJpgDir}/${tok.address}.jpg`, jpg);
+      return {
+        ...tok,
+        logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${tok.address}/icon.png`,
+        extensions: {
+          ...tok.extensions,
+          website: "https://app.saber.so",
+        },
+      };
+    })
   );
   const decimalWrapperTokenList: TokenList = {
     name: `Saber Decimal Wrapped Token List (${network})`,

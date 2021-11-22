@@ -45,7 +45,18 @@ export const updateSolanaTokenList = async (
   );
 
   const [firstToken, ...restOfTokens] = existing.tokens;
-  const nextTokens = [firstToken, ...newTokens, ...restOfTokens];
+  const nextTokens = [firstToken, ...newTokens, ...restOfTokens].map((tok) => {
+    if (!tok) {
+      return tok;
+    }
+    if (tok.tags?.includes("saber-decimal-wrapped")) {
+      return {
+        ...tok,
+        extensions: { ...tok.extensions, website: "https://app.saber.so" },
+      };
+    }
+    return tok;
+  });
 
   await fs.writeFile(
     `${__dirname}/../../../token-list/src/tokens/solana.tokenlist.json`,
