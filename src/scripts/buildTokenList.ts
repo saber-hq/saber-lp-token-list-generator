@@ -3,6 +3,7 @@ import type { TokenInfo, TokenList } from "@saberhq/token-utils";
 import axios from "axios";
 import * as fs from "fs/promises";
 
+import { createDecimalWrapperTokenIcon } from "../createDecimalWrapperTokenIcon";
 import { createLPTokenIcon } from "../createLPTokenIcon";
 
 export interface PoolInfoRaw {
@@ -49,8 +50,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
       };
     })
   );
-
-  const list: TokenList = {
+  const lpTokenList: TokenList = {
     name: `Saber LP Token List (${network})`,
     logoURI:
       "https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/sbr.svg",
@@ -60,33 +60,69 @@ export const buildTokenList = async (network: Network): Promise<void> => {
       return a.address < b.address ? -1 : 1;
     }),
   };
-
   await fs.writeFile(
     `${dir}/lists/saber-lp.${network}.json`,
-    JSON.stringify(list, null, 2)
+    JSON.stringify(lpTokenList, null, 2)
   );
 
-  const tokensForSolanaTokenList = list.tokens.map((tok) => {
-    const logoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
-    const theToken = {
-      ...tok,
-      name: tok.name.endsWith(" Saber LP")
-        ? `Saber ${tok.name.replace(/ Saber LP/g, " LP")}`
-        : tok.name,
-      symbol: tok.symbol.replace(/_/g, ""),
-      logoURI,
-    };
-    if (tok.extensions) {
-      const {
-        underlyingTokens: _underlyingTokens,
-        source: _source,
-        currency: _currency,
-        ...extensions
-      } = tok.extensions;
-      return { ...theToken, extensions };
-    }
-    return theToken;
-  });
+  const decimalWrappedTokens = await Promise.all(
+    data.pools
+      .flatMap((pool) => pool.tokens)
+      .filter((tok) => tok.tags?.includes("saber-decimal-wrapped"))
+      .map(async (tok) => {
+        const { png, jpg } = await createDecimalWrapperTokenIcon(
+          tok,
+          tok.decimals
+        );
+        await fs.mkdir(`${assetsDir}/${tok.address}`, {
+          recursive: true,
+        });
+        await fs.writeFile(`${assetsDir}/${tok.address}/icon.png`, png);
+        await fs.writeFile(`${assetsJpgDir}/${tok.address}.jpg`, jpg);
+        return {
+          ...tok,
+          logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${tok.address}/icon.png`,
+        };
+      })
+  );
+  const decimalWrapperTokenList: TokenList = {
+    name: `Saber Decimal Wrapped Token List (${network})`,
+    logoURI:
+      "https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/sbr.svg",
+    tags: {},
+    timestamp: new Date().toISOString(),
+    tokens: decimalWrappedTokens.sort((a, b) => {
+      return a.address < b.address ? -1 : 1;
+    }),
+  };
+  await fs.writeFile(
+    `${dir}/lists/saber-wrapped.${network}.json`,
+    JSON.stringify(decimalWrapperTokenList, null, 2)
+  );
+
+  const tokensForSolanaTokenList = [...lpTokens, ...decimalWrappedTokens]
+    .sort((a, b) => (a.address < b.address ? -1 : 1))
+    .map((tok) => {
+      const logoURI = `https://raw.githubusercontent.com/solana-labs/token-list/main/assets/${networkFmt}/${tok.address}/icon.png`;
+      const theToken = {
+        ...tok,
+        name: tok.name.endsWith(" Saber LP")
+          ? `Saber ${tok.name.replace(/ Saber LP/g, " LP")}`
+          : tok.name,
+        symbol: tok.symbol.replace(/_/g, ""),
+        logoURI,
+      };
+      if (tok.extensions) {
+        const {
+          underlyingTokens: _underlyingTokens,
+          source: _source,
+          currency: _currency,
+          ...extensions
+        } = tok.extensions;
+        return { ...theToken, extensions };
+      }
+      return theToken;
+    });
 
   await fs.writeFile(
     `${dir}/solana-token-list/tokens.${network}.json`,
