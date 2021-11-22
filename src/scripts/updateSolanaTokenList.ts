@@ -44,8 +44,9 @@ export const updateSolanaTokenList = async (
     (tok) => !existing.tokens.find((t) => t.address === tok.address)
   );
 
-  const [firstToken, ...restOfTokens] = existing.tokens;
-  const nextTokens = [firstToken, ...newTokens, ...restOfTokens];
+  const firstTokens = existing.tokens.slice(0, existing.tokens.length - 1);
+  const lastToken = existing.tokens[existing.tokens.length - 1];
+  const nextTokens = [...firstTokens, ...newTokens, lastToken];
 
   await fs.writeFile(
     `${__dirname}/../../../token-list/src/tokens/solana.tokenlist.json`,

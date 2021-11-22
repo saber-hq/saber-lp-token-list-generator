@@ -88,8 +88,15 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         website: "https://app.saber.so",
       };
       delete extensions.assetContract;
+
+      const name =
+        tok.name.length > 50
+          ? tok.name.replace("Saber Wrapped", "Saber")
+          : tok.name;
+
       return {
         ...tok,
+        name,
         logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${tok.address}/icon.png`,
         tags: tok.tags?.map((t) =>
           t === "saber-decimal-wrapped" ? "saber-dec-wrapped" : t
