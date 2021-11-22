@@ -56,12 +56,14 @@ export const buildTokenList = async (network: Network): Promise<void> => {
       "https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/sbr.svg",
     tags: {},
     timestamp: new Date().toISOString(),
-    tokens: lpTokens,
+    tokens: lpTokens.sort((a, b) => {
+      return a.address < b.address ? -1 : 1;
+    }),
   };
 
   await fs.writeFile(
     `${dir}/lists/saber-lp.${network}.json`,
-    JSON.stringify(list)
+    JSON.stringify(list, null, 2)
   );
 
   const tokensForSolanaTokenList = list.tokens.map((tok) => {
