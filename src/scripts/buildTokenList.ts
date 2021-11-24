@@ -70,7 +70,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
     uniqBy(
       data.pools
         .flatMap((pool) => pool.tokens)
-        .filter((tok) => tok.tags?.includes("saber-decimal-wrapped")),
+        .filter((tok) => tok.tags?.includes("saber-dec-wrapped")),
       (v) => v.address
     ).map(async (tok) => {
       const { png, jpg } = await createDecimalWrapperTokenIcon(
