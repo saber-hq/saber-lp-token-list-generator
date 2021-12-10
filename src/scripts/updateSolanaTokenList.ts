@@ -58,7 +58,9 @@ export const updateSolanaTokenList = async (
       },
       null,
       2
-    ).replaceAll("&", "\\u0026")
+    )
+      .replaceAll(">", "\\u003e")
+      .replaceAll("&", "\\u0026")
   );
 };
 

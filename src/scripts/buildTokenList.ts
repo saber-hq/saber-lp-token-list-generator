@@ -136,6 +136,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         const {
           underlyingTokens: _underlyingTokens,
           source: _source,
+          sourceUrl: _sourceUrl,
           currency: _currency,
           ...extensions
         } = tok.extensions;

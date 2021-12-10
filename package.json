@@ -41,7 +41,7 @@
     "lint": "eslint . --cache",
     "build": "rm -fr data/ && cp -R public/ data/ && npm run build-token-list",
     "build-token-list": "ts-node src/scripts/buildTokenList",
-    "copy-to-solana": "cp -R data/assets/mainnet/* ../token-list/assets/mainnet/",
+    "copy-to-solana": "cp -Rn data/assets/mainnet/* ../token-list/assets/mainnet/",
     "force-copy-to-solana": "cp -TRv data/assets/mainnet/ ../token-list/assets/mainnet/",
     "update-solana-token-list": "ts-node src/scripts/updateSolanaTokenList",
     "prepare": "husky install"
