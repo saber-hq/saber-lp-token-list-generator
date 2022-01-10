@@ -16,12 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
       - name: Yarn Cache
         uses: actions/cache@v2
         with:
-          path: ./.yarn
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-modules-
@@ -29,6 +30,7 @@ jobs:
         run: sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
       - run: yarn install
       - run: yarn build
+      - run: yarn dlx @yarnpkg/doctor
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
