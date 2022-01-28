@@ -46,8 +46,9 @@ export const buildLaunchBanners = async (network: Network): Promise<void> => {
 
   await Promise.all(
     tokens.map(async (token) => {
-      const { jpg } = await createAssetLaunchBanner(token);
+      const { jpg, png } = await createAssetLaunchBanner(token);
       await fs.writeFile(`${bannersDir}/${token.address}.jpg`, jpg);
+      await fs.writeFile(`${bannersDir}/${token.address}.png`, png);
     })
   );
 };
