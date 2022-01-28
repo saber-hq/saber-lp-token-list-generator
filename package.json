@@ -34,12 +34,14 @@
     "canvas": "^2.9.0",
     "jsbi": "^4.1.0",
     "lodash": "^4.17.21",
+    "node-vibrant": "^3.2.1-alpha.1",
     "sharp": "^0.29.3",
     "tiny-invariant": "^1.2.0"
   },
   "scripts": {
     "lint": "eslint . --cache",
     "build": "rm -fr data/ && cp -R public/ data/ && npm run build-token-list",
+    "build-launch-banners": "ts-node src/scripts/buildLaunchBanners",
     "build-token-list": "ts-node src/scripts/buildTokenList",
     "copy-to-solana": "cp -Rn data/assets/mainnet/* ../token-list/assets/mainnet/",
     "force-copy-to-solana": "cp -TRv data/assets/mainnet/ ../token-list/assets/mainnet/",
