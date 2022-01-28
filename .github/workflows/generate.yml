@@ -31,6 +31,7 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: yarn build-launch-banners
+      - run: yarn build-pool-banners
       - run: yarn dlx @yarnpkg/doctor
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

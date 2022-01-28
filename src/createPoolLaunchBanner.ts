@@ -9,7 +9,7 @@ import sharp from "sharp";
 const WIDTH = 1200;
 const HEIGHT = 628;
 
-const drawImage = async ({
+const generateTokenImage = async ({
   url,
 }: {
   url?: string;
@@ -50,9 +50,10 @@ const drawImage = async ({
   return { colorStart: null, colorEnd: null, image: null };
 };
 
-export const createAssetLaunchBanner = async (
-  token: TokenInfo
-): Promise<{ png: Buffer; jpg: Buffer }> => {
+export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
+  TokenInfo,
+  TokenInfo
+]): Promise<{ png: Buffer; jpg: Buffer }> => {
   const launchBannerBG = await fs.readFile(`${__dirname}/launch-banner.svg`);
 
   registerFont(`${__dirname}/Inter-Bold.ttf`, {
@@ -73,14 +74,17 @@ export const createAssetLaunchBanner = async (
   ctx.quality = "best";
   ctx.patternQuality = "best";
 
-  const { colorStart, colorEnd, image } = await drawImage({
-    url: token.logoURI,
+  const tokenAImg = await generateTokenImage({
+    url: tokenA.logoURI,
+  });
+  const tokenBImg = await generateTokenImage({
+    url: tokenB.logoURI,
   });
 
   const launchBannerStr = launchBannerBG
     .toString()
-    .replaceAll("$ASSET_BORDER_COLOR_1", colorStart ?? "#000")
-    .replaceAll("$ASSET_BORDER_COLOR_2", colorEnd ?? "#000");
+    .replaceAll("$ASSET_BORDER_COLOR_1", tokenAImg.colorStart ?? "#000")
+    .replaceAll("$ASSET_BORDER_COLOR_2", tokenBImg.colorStart ?? "#000");
 
   // run through sharp to be safe
   const rasterizedBanner = await sharp(Buffer.from(launchBannerStr, "utf-8"))
@@ -101,23 +105,40 @@ export const createAssetLaunchBanner = async (
   );
 
   ctx.font = `bold 48px Inter`;
-  const symbolSize = ctx.measureText(token.symbol);
-  const textWidth = symbolSize.width;
-  const textHeight = symbolSize.actualBoundingBoxAscent;
+  const symbolSizeA = ctx.measureText(tokenA.symbol + " /");
+  const textWidthA = symbolSizeA.width;
+  const textHeightA = symbolSizeA.actualBoundingBoxAscent;
+
+  const symbolSizeB = ctx.measureText(tokenB.symbol);
+  const textWidthB = symbolSizeB.width;
+  const textHeightB = symbolSizeB.actualBoundingBoxAscent;
 
   const iconDim = 64;
-  const totalWidth = iconDim + textWidth + 16;
+  const totalWidth = iconDim + 8 + textWidthA + 8 + iconDim + 8 + textWidthB;
   const startX = WIDTH / 2 - totalWidth / 2;
   const startY = 240;
 
-  if (image) {
+  if (tokenAImg.image) {
     ctx.drawImage(
-      image,
+      tokenAImg.image,
       0,
       0,
-      image.width,
-      image.height,
+      tokenAImg.image.width,
+      tokenAImg.image.height,
       startX,
+      startY,
+      iconDim,
+      iconDim
+    );
+  }
+  if (tokenBImg.image) {
+    ctx.drawImage(
+      tokenBImg.image,
+      0,
+      0,
+      tokenBImg.image.width,
+      tokenBImg.image.height,
+      startX + iconDim + 8 + textWidthA + 8,
       startY,
       iconDim,
       iconDim
@@ -126,15 +147,27 @@ export const createAssetLaunchBanner = async (
 
   ctx.fillStyle = "white";
   ctx.fillText(
-    token.symbol,
-    startX + iconDim + 16,
-    startY + iconDim - textHeight / 2
+    tokenA.symbol + " /",
+    startX + iconDim + 8,
+    startY + iconDim - textHeightA / 2
+  );
+  ctx.fillText(
+    tokenB.symbol,
+    startX + iconDim + 8 + textWidthA + 8 + iconDim + 8,
+    startY + iconDim - textHeightB / 2
   );
 
   ctx.font = `medium 28px Inter`;
   ctx.fillStyle = "#979EAF";
   ctx.textAlign = "center";
-  ctx.fillText(token.name, WIDTH / 2, 321 + 34);
+
+  const subtitle = `${tokenA.name} / ${tokenB.name}`;
+  const expectedWidth = ctx.measureText(subtitle).width;
+  const maxWidth = 771 - 24 * 2;
+  if (expectedWidth > maxWidth) {
+    ctx.font = `medium ${(28 * maxWidth) / expectedWidth}px Inter`;
+  }
+  ctx.fillText(subtitle, WIDTH / 2, 321 + 34, 771 - 24 * 2);
 
   ctx.fillStyle = "#222324";
   ctx.fillRect(WIDTH / 2 - 203 / 2, 397, 203, 1);

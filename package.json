@@ -41,6 +41,7 @@
   "scripts": {
     "lint": "eslint . --cache",
     "build": "rm -fr data/ && cp -R public/ data/ && npm run build-token-list",
+    "build-pool-banners": "ts-node src/scripts/buildPoolBanners",
     "build-launch-banners": "ts-node src/scripts/buildLaunchBanners",
     "build-token-list": "ts-node src/scripts/buildTokenList",
     "copy-to-solana": "cp -Rn data/assets/mainnet/* ../token-list/assets/mainnet/",
