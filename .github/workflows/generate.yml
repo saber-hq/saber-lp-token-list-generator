@@ -38,3 +38,5 @@ jobs:
           publish_dir: ./data
           publish_branch: master
           external_repository: saber-hq/saber-lp-token-list
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
