@@ -1,6 +1,6 @@
 import type { TokenInfo } from "@saberhq/token-utils";
 import axios from "axios";
-import type { Image, NodeCanvasRenderingContext2D } from "canvas";
+import type { CanvasRenderingContext2D, Image } from "canvas";
 import { createCanvas, loadImage } from "canvas";
 import sharp from "sharp";
 
@@ -10,7 +10,7 @@ const drawImage = async ({
   ctx,
   url,
 }: {
-  ctx: NodeCanvasRenderingContext2D;
+  ctx: CanvasRenderingContext2D;
   url?: string;
 }) => {
   try {
