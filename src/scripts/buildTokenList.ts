@@ -24,7 +24,7 @@ export interface PoolInfoRaw {
 export const buildTokenList = async (network: Network): Promise<void> => {
   const networkFmt = network === "mainnet-beta" ? "mainnet" : network;
   const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
-    `https://registry.saber.so/data/pools-info.${networkFmt}.json`
+    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`
   );
 
   const dir = `${__dirname}/../../data`;
