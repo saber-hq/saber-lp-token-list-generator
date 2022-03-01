@@ -43,6 +43,7 @@ export const updateSolanaTokenList = async (
   const newTokens = myTokens.filter(
     (tok) => !existing.tokens.find((t) => t.address === tok.address)
   );
+  console.log("Found", newTokens.length, "new tokens");
 
   const firstTokens = existing.tokens.slice(0, existing.tokens.length - 1);
   const lastToken = existing.tokens[existing.tokens.length - 1];
