@@ -11,6 +11,29 @@
     ] (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
-        devShell = pkgs.mkShell { buildInputs = with pkgs; [ coreutils ]; };
+        devShell = with pkgs;
+          mkShell {
+            nativeBuildInputs = [ pkg-config ];
+            buildInputs = [
+              coreutils
+              nodejs
+              yarn
+
+              autoreconfHook
+              xorg.libX11
+              xorg.libXi
+              xorg.libXext
+              libGLU
+              zlib
+              glibc.out
+              glibc.static
+              libpng
+              nasm
+              cairo
+              pango
+              libuuid
+            ];
+            LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
+          };
       });
 }
