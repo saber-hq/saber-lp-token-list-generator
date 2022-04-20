@@ -8,32 +8,36 @@
       "aarch64-darwin"
       "x86_64-darwin"
       "x86_64-linux"
-    ] (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
-      in {
-        devShell = with pkgs;
-          mkShell {
-            nativeBuildInputs = [ pkg-config ];
-            buildInputs = [
-              coreutils
-              nodejs
-              yarn
+    ]
+      (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          devShell = with pkgs;
+            mkShell {
+              nativeBuildInputs = [ pkg-config ];
+              buildInputs = [
+                coreutils
+                nodejs
+                yarn
 
-              autoreconfHook
-              xorg.libX11
-              xorg.libXi
-              xorg.libXext
-              libGLU
-              zlib
-              glibc.out
-              glibc.static
-              libpng
-              nasm
-              cairo
-              pango
-              libuuid
-            ];
-            LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
-          };
-      });
+                autoreconfHook
+                xorg.libX11
+                xorg.libXi
+                xorg.libXext
+                libGLU
+                zlib
+                libpng
+                nasm
+                cairo
+                pango
+                libuuid
+                librsvg
+              ] ++ (pkgs.lib.optionals (!pkgs.stdenv.isAarch64) [
+                glibc.out
+                glibc.static
+              ]);
+              LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
+            };
+        });
 }
