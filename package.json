@@ -35,7 +35,7 @@
     "jsbi": "^4.3.0",
     "lodash": "^4.17.21",
     "node-vibrant": "^3.2.1-alpha.1",
-    "sharp": "^0.30.4",
+    "sharp": "^0.30.5",
     "tiny-invariant": "^1.2.0"
   },
   "scripts": {
