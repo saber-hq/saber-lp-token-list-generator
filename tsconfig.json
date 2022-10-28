@@ -14,5 +14,5 @@
     "noEmit": true,
     "lib": ["ES2021"]
   },
-  "include": ["src/"]
+  "include": ["src/", ".eslintrc.cjs"]
 }
