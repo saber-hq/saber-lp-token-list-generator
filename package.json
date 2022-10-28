@@ -39,6 +39,7 @@
     "tiny-invariant": "^1.3.1"
   },
   "scripts": {
+    "typecheck": "tsc",
     "lint": "eslint . --cache",
     "build": "rm -fr data/ && cp -R public/ data/ && npm run build-token-list",
     "build-pool-banners": "ts-node src/scripts/buildPoolBanners.ts",
