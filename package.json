@@ -29,7 +29,7 @@
     "@saberhq/solana-contrib": "^1.14.9",
     "@saberhq/token-utils": "^1.14.9",
     "@solana/web3.js": "^1.66.2",
-    "axios": "^0.26.1",
+    "axios": "^1.2.2",
     "bn.js": "^5.2.1",
     "canvas": "^2.10.1",
     "jsbi": "^4.3.0",
