@@ -161,7 +161,14 @@ export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
   ctx.fillStyle = "#979EAF";
   ctx.textAlign = "center";
 
-  const subtitle = `${tokenA.name} / ${tokenB.name}`;
+  const makeTokenName = (token: TokenInfo) => {
+    if (token.address === "So11111111111111111111111111111111111111112") {
+      return "SOL";
+    }
+    return token.name;
+  };
+
+  const subtitle = `${makeTokenName(tokenA)} / ${makeTokenName(tokenB)}`;
   const expectedWidth = ctx.measureText(subtitle).width;
   const maxWidth = 771 - 24 * 2;
   if (expectedWidth > maxWidth) {
