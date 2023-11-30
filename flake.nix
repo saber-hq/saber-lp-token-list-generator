@@ -32,14 +32,15 @@
                 pango
                 libuuid
                 librsvg
-              ] ++ (pkgs.lib.optionals (!pkgs.stdenv.isAarch64) [
+              ] ++ lib.optionals (!stdenv.isAarch64) [
                 glibc.out
                 glibc.static
-              ]) ++
-              (pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
+              ] ++ lib.optionals (!stdenv.isDarwin) [
                 libGLU
-              ])
-              ;
+              ] ++ lib.optionals stdenv.isDarwin [
+                darwin.apple_sdk_11_0.frameworks.CoreText
+              ];
+
               LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
             };
         });
