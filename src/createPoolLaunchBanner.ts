@@ -52,7 +52,7 @@ const generateTokenImage = async ({
 
 export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
   TokenInfo,
-  TokenInfo
+  TokenInfo,
 ]): Promise<{ png: Buffer; jpg: Buffer }> => {
   const launchBannerBG = await fs.readFile(`${__dirname}/launch-banner.svg`);
 
@@ -101,7 +101,7 @@ export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
     0,
     0,
     WIDTH,
-    HEIGHT
+    HEIGHT,
   );
 
   ctx.font = `bold 48px Inter`;
@@ -128,7 +128,7 @@ export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
       startX,
       startY,
       iconDim,
-      iconDim
+      iconDim,
     );
   }
   if (tokenBImg.image) {
@@ -141,7 +141,7 @@ export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
       startX + iconDim + 8 + textWidthA + 8,
       startY,
       iconDim,
-      iconDim
+      iconDim,
     );
   }
 
@@ -149,12 +149,12 @@ export const createPoolLaunchBanner = async ([tokenA, tokenB]: readonly [
   ctx.fillText(
     tokenA.symbol + " /",
     startX + iconDim + 8,
-    startY + iconDim - textHeightA / 2
+    startY + iconDim - textHeightA / 2,
   );
   ctx.fillText(
     tokenB.symbol,
     startX + iconDim + 8 + textWidthA + 8 + iconDim + 8,
-    startY + iconDim - textHeightB / 2
+    startY + iconDim - textHeightB / 2,
   );
 
   ctx.font = `medium 28px Inter`;

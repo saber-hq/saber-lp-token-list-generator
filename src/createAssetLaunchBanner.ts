@@ -51,7 +51,7 @@ const drawImage = async ({
 };
 
 export const createAssetLaunchBanner = async (
-  token: TokenInfo
+  token: TokenInfo,
 ): Promise<{ png: Buffer; jpg: Buffer }> => {
   const launchBannerBG = await fs.readFile(`${__dirname}/launch-banner.svg`);
 
@@ -97,7 +97,7 @@ export const createAssetLaunchBanner = async (
     0,
     0,
     WIDTH,
-    HEIGHT
+    HEIGHT,
   );
 
   ctx.font = `bold 48px Inter`;
@@ -120,7 +120,7 @@ export const createAssetLaunchBanner = async (
       startX,
       startY,
       iconDim,
-      iconDim
+      iconDim,
     );
   }
 
@@ -128,7 +128,7 @@ export const createAssetLaunchBanner = async (
   ctx.fillText(
     token.symbol,
     startX + iconDim + 16,
-    startY + iconDim - textHeight / 2
+    startY + iconDim - textHeight / 2,
   );
 
   ctx.font = `medium 28px Inter`;
