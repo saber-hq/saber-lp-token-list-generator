@@ -25,7 +25,6 @@
                 xorg.libX11
                 xorg.libXi
                 xorg.libXext
-                libGLU
                 zlib
                 libpng
                 nasm
@@ -36,7 +35,11 @@
               ] ++ (pkgs.lib.optionals (!pkgs.stdenv.isAarch64) [
                 glibc.out
                 glibc.static
-              ]);
+              ]) ++
+              (pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
+                libGLU
+              ])
+              ;
               LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
             };
         });
