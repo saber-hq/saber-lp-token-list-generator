@@ -22,7 +22,7 @@ export interface PoolInfoRaw {
 export const buildPoolBanners = async (network: Network): Promise<void> => {
   const networkFmt = network === "mainnet-beta" ? "mainnet" : network;
   const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
-    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`
+    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`,
   );
 
   const dir = `${__dirname}/../../data`;
@@ -38,7 +38,7 @@ export const buildPoolBanners = async (network: Network): Promise<void> => {
       const { jpg, png } = await createPoolLaunchBanner(pool.underlyingIcons);
       await fs.writeFile(`${bannersDir}/${pool.id}.jpg`, jpg);
       await fs.writeFile(`${bannersDir}/${pool.id}.png`, png);
-    })
+    }),
   );
 };
 

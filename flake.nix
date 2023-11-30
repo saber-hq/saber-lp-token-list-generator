@@ -25,7 +25,6 @@
                 xorg.libX11
                 xorg.libXi
                 xorg.libXext
-                libGLU
                 zlib
                 libpng
                 nasm
@@ -33,10 +32,15 @@
                 pango
                 libuuid
                 librsvg
-              ] ++ (pkgs.lib.optionals (!pkgs.stdenv.isAarch64) [
+              ] ++ lib.optionals (!stdenv.isAarch64) [
                 glibc.out
                 glibc.static
-              ]);
+              ] ++ lib.optionals (!stdenv.isDarwin) [
+                libGLU
+              ] ++ lib.optionals stdenv.isDarwin [
+                darwin.apple_sdk_11_0.frameworks.CoreText
+              ];
+
               LD_LIBRARY_PATH = lib.makeLibraryPath [ libuuid ];
             };
         });

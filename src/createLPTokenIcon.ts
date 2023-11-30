@@ -40,7 +40,7 @@ const drawSubImg = async ({
       position === "a" ? 0 : DIMENSION / 2,
       0,
       DIMENSION / 2,
-      DIMENSION
+      DIMENSION,
     );
   } catch (e) {
     console.warn(`Unsupported image: ${url ?? ""}`, e);
@@ -48,7 +48,7 @@ const drawSubImg = async ({
 };
 
 export const createLPTokenIcon = async (
-  underlying: readonly [TokenInfo, TokenInfo]
+  underlying: readonly [TokenInfo, TokenInfo],
 ): Promise<{ png: Buffer; jpg: Buffer }> => {
   const canvas = createCanvas(DIMENSION, DIMENSION);
   const ctx = canvas.getContext("2d");

@@ -38,7 +38,7 @@ const drawImage = async ({
       0,
       0,
       DIMENSION,
-      DIMENSION
+      DIMENSION,
     );
   } catch (e) {
     console.warn(`Unsupported image: ${url ?? ""}`, e);
@@ -47,7 +47,7 @@ const drawImage = async ({
 
 export const createDecimalWrapperTokenIcon = async (
   token: TokenInfo,
-  decimals: number
+  decimals: number,
 ): Promise<{ png: Buffer; jpg: Buffer }> => {
   const canvas = createCanvas(DIMENSION, DIMENSION);
   const ctx = canvas.getContext("2d");
@@ -73,7 +73,7 @@ export const createDecimalWrapperTokenIcon = async (
   ctx.fillText(
     decimals.toString(),
     DIMENSION / 2,
-    (DIMENSION * 7) / 8 + fontSize * 0.1
+    (DIMENSION * 7) / 8 + fontSize * 0.1,
   );
 
   const mask = await loadImage(`${__dirname}/mask.svg`);

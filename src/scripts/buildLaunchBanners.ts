@@ -23,7 +23,7 @@ export interface PoolInfoRaw {
 export const buildLaunchBanners = async (network: Network): Promise<void> => {
   const networkFmt = network === "mainnet-beta" ? "mainnet" : network;
   const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
-    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`
+    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`,
   );
 
   const dir = `${__dirname}/../../data`;
@@ -38,10 +38,10 @@ export const buildLaunchBanners = async (network: Network): Promise<void> => {
     mapValues(
       groupBy(
         data.pools.flatMap((pool) => pool.underlyingIcons),
-        (token) => token.address
+        (token) => token.address,
       ),
-      (v) => v[0]
-    )
+      (v) => v[0],
+    ),
   ).filter((x): x is TokenInfo => !!x);
 
   await Promise.all(
@@ -49,7 +49,7 @@ export const buildLaunchBanners = async (network: Network): Promise<void> => {
       const { jpg, png } = await createAssetLaunchBanner(token);
       await fs.writeFile(`${bannersDir}/${token.address}.jpg`, jpg);
       await fs.writeFile(`${bannersDir}/${token.address}.png`, png);
-    })
+    }),
   );
 };
 

@@ -17,14 +17,14 @@ export interface PoolInfoRaw {
 }
 
 export const updateSolanaTokenList = async (
-  network: Network
+  network: Network,
 ): Promise<void> => {
   const { version, ...existing } = JSON.parse(
     (
       await fs.readFile(
-        `${__dirname}/../../../token-list/src/tokens/solana.tokenlist.json`
+        `${__dirname}/../../../token-list/src/tokens/solana.tokenlist.json`,
       )
-    ).toString()
+    ).toString(),
   ) as TokenList & {
     version: {
       major: number;
@@ -35,13 +35,13 @@ export const updateSolanaTokenList = async (
   const myTokens = JSON.parse(
     (
       await fs.readFile(
-        `${__dirname}/../../data/solana-token-list/tokens.${network}.json`
+        `${__dirname}/../../data/solana-token-list/tokens.${network}.json`,
       )
-    ).toString()
+    ).toString(),
   ) as TokenInfo[];
 
   const newTokens = myTokens.filter(
-    (tok) => !existing.tokens.find((t) => t.address === tok.address)
+    (tok) => !existing.tokens.find((t) => t.address === tok.address),
   );
   console.log("Found", newTokens.length, "new tokens");
 
@@ -58,10 +58,10 @@ export const updateSolanaTokenList = async (
         version,
       },
       null,
-      2
+      2,
     )
       .replaceAll(">", "\\u003e")
-      .replaceAll("&", "\\u0026")
+      .replaceAll("&", "\\u0026"),
   );
 };
 

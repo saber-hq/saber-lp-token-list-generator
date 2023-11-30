@@ -24,7 +24,7 @@ export interface PoolInfoRaw {
 export const buildTokenList = async (network: Network): Promise<void> => {
   const networkFmt = network === "mainnet-beta" ? "mainnet" : network;
   const { data } = await axios.get<{ pools: PoolInfoRaw[] }>(
-    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`
+    `https://raw.githubusercontent.com/saber-hq/saber-registry-dist/master/data/pools-info.${networkFmt}.json`,
   );
 
   const dir = `${__dirname}/../../data`;
@@ -49,7 +49,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         ...pool.lpToken,
         logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${pool.lpToken.address}/icon.png`,
       };
-    })
+    }),
   );
   const lpTokenList: TokenList = {
     name: `Saber LP Token List (${network})`,
@@ -63,7 +63,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   };
   await fs.writeFile(
     `${dir}/lists/saber-lp.${network}.json`,
-    JSON.stringify(lpTokenList, null, 2)
+    JSON.stringify(lpTokenList, null, 2),
   );
 
   const decimalWrappedTokens = await Promise.all(
@@ -71,11 +71,11 @@ export const buildTokenList = async (network: Network): Promise<void> => {
       data.pools
         .flatMap((pool) => pool.tokens)
         .filter((tok) => tok.tags?.includes("saber-dec-wrapped")),
-      (v) => v.address
+      (v) => v.address,
     ).map(async (tok) => {
       const { png, jpg } = await createDecimalWrapperTokenIcon(
         tok,
-        tok.decimals
+        tok.decimals,
       );
       await fs.mkdir(`${assetsDir}/${tok.address}`, {
         recursive: true,
@@ -99,11 +99,11 @@ export const buildTokenList = async (network: Network): Promise<void> => {
         name,
         logoURI: `https://raw.githubusercontent.com/saber-hq/saber-lp-token-list/master/assets/${networkFmt}/${tok.address}/icon.png`,
         tags: tok.tags?.map((t) =>
-          t === "saber-decimal-wrapped" ? "saber-dec-wrapped" : t
+          t === "saber-decimal-wrapped" ? "saber-dec-wrapped" : t,
         ),
         extensions,
       };
-    })
+    }),
   );
   const decimalWrapperTokenList: TokenList = {
     name: `Saber Decimal Wrapped Token List (${network})`,
@@ -117,7 +117,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
   };
   await fs.writeFile(
     `${dir}/lists/saber-wrapped.${network}.json`,
-    JSON.stringify(decimalWrapperTokenList, null, 2)
+    JSON.stringify(decimalWrapperTokenList, null, 2),
   );
 
   const tokensForSolanaTokenList = [...lpTokens, ...decimalWrappedTokens]
@@ -147,7 +147,7 @@ export const buildTokenList = async (network: Network): Promise<void> => {
 
   await fs.writeFile(
     `${dir}/solana-token-list/tokens.${network}.json`,
-    JSON.stringify(tokensForSolanaTokenList, null, 2)
+    JSON.stringify(tokensForSolanaTokenList, null, 2),
   );
 };
 
@@ -155,5 +155,5 @@ Promise.all([buildTokenList("mainnet-beta"), buildTokenList("devnet")]).catch(
   (err) => {
     console.error(err);
     process.exit(1);
-  }
+  },
 );
